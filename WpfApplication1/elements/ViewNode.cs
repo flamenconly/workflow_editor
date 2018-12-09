@@ -10,11 +10,21 @@ namespace WpfApplication1.elements
 {
     public class ViewNode : ViewObject
     {
+        /// <summary>
+        /// Edges which are connecting Inputs into the node
+        /// </summary>
         public List<ViewEdge> InEdges { get; private set; } = new List<ViewEdge>();
 
+        /// <summary>
+        /// Edges which are connecting this Nodes with others
+        /// </summary>
         public List<ViewEdge> OutEdges { get; private set; } = new List<ViewEdge>();
 
-        public IDrawable DrawingShape { get; set; } = new RectangleDrawingObject();
+        public Point IncomingConnectorLocation { get; set; } = new Point(1,1);
+
+        public Point OutgoingConnectorLocation { get; set; } = new Point(100, 100);
+
+        public shapes.IDrawable DrawingShape { get; set; } = new shapes.RectangleDrawingObject();
 
         public ViewNode(ViewableDataObject UserData) {
             if (UserData == null) throw new ArgumentNullException("UserData");
@@ -35,23 +45,6 @@ namespace WpfApplication1.elements
 
         #endregion
 
-        private class RectangleDrawingObject : IDrawable
-        {
-            public Rect Shape { get; set; }
-            public Brush Brush { get; set; }
-            public Pen Pen { get; set; }
-
-            public RectangleDrawingObject()
-            {
-                Shape = new Rect(10, 10, 100, 100);
-                Brush = new SolidColorBrush(Colors.Black);
-                Pen = new Pen(Brush, 1d);
-            }
-
-            public void OnRender(DrawingContext drawingContext)
-            {
-                drawingContext.DrawRectangle(Brush, Pen, Shape);
-            }
-        }
+        
     }
 }

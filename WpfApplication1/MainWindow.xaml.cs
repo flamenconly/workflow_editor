@@ -40,6 +40,9 @@ namespace WpfApplication1
 
             viewNode = new elements.ViewNode(new NodeViewDataObject() { Title = "Second1", Tooltip = "Second" });
             ViewGraphViewModel.NodesList.Add(viewNode);
+
+            var viewEdge = new elements.ViewEdge(new NodeViewDataObject() { Title = "First1", Tooltip = "Second" },viewNode,viewNode);
+            ViewGraphViewModel.EdgesList.Add(viewEdge);
         }
 
         private class NodeViewDataObject : elements.ViewableDataObject

@@ -111,7 +111,7 @@ namespace WpfApplication1.elements
             {
                 var node = item as ViewObject;
                 Children.Remove(node);
-                enableDrag(node);
+                disableDrag(node);
             }
         }
 
@@ -121,7 +121,7 @@ namespace WpfApplication1.elements
             {
                 var node = item as ViewObject;
                 Children.Add(node);
-                disableDrag(node);
+                enableDrag(node);
             }
         }
         
@@ -159,7 +159,7 @@ namespace WpfApplication1.elements
         }
 
         // Using a DependencyProperty as the backing store for Edge.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty EdgeProperty =
+        public static readonly DependencyProperty EdgesProperty =
             DependencyProperty.Register("Edges", typeof(ObservableCollection<ViewEdge>), typeof(ViewGraph),
                 new FrameworkPropertyMetadata(new ObservableCollection<ViewEdge>(),
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
@@ -167,7 +167,7 @@ namespace WpfApplication1.elements
 
         private static void OnEdgesPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs baseValue)
         {
-            d.SetValue(EdgeProperty, baseValue.NewValue);
+            d.SetValue(EdgesProperty, baseValue.NewValue);
             if (baseValue.OldValue != null)
             {
                 deregisterEdges(baseValue.OldValue as ObservableCollection<ViewEdge>);
@@ -216,9 +216,9 @@ namespace WpfApplication1.elements
 
         public ObservableCollection<ViewEdge> Edges
         {
-            get { return (ObservableCollection<ViewEdge>)GetValue(EdgeProperty); }
+            get { return (ObservableCollection<ViewEdge>)GetValue(EdgesProperty); }
             set {
-                SetValue(EdgeProperty, value);
+                SetValue(EdgesProperty, value);
             }
         }
 

@@ -15,7 +15,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <local:ViewGraph x:Name="viewer" 
-                         Nodes="{Binding DataContext.NodesList, ElementName=mainWindow}"  />
+                         Nodes="{Binding NodesList}"
+                         Edges="{Binding EdgesList}"/>
 
 
     </Grid>

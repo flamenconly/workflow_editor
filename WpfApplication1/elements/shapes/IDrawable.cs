@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace WpfApplication1.elements
+namespace WpfApplication1.elements.shapes
 {
     public interface IDrawable
     {

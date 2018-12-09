@@ -15,5 +15,7 @@ namespace WpfApplication1.elements
         }
 
         public bool IsDraggable { get; set; } = true;
+
+        shapes.IDrawable DrawingShape { get; set; }
     }
 }
