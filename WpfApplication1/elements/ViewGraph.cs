@@ -9,6 +9,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections;
+using WpfApplication1.elements.shapes;
+using WpfApplication1.elements.adorner;
+using System.Windows.Documents;
 
 namespace WpfApplication1.elements
 {
@@ -18,6 +21,7 @@ namespace WpfApplication1.elements
         private MouseButtonEventHandler mouseUp;
 
         private MouseEventHandler mouseMove;
+
         private Action<UIElement> enableDrag;
         private Action<UIElement> disableDrag;
 
@@ -54,24 +58,31 @@ namespace WpfApplication1.elements
                 }
             };
 
+            // Mousedown Implementation
             mouseDown = (sender, args) => {
-                var element = sender as ViewObject;
+                var element = sender as UIElement;
                 if (element == null) return;
-                if (element.IsDraggable == false) return;
-                
+
                 dragStart = args.GetPosition(element);
                 element.CaptureMouse();
             };
 
+            // Mouseup Implementation
             mouseUp = (sender, args) =>
             {
                 var element = sender as UIElement;
                 if (element == null) return;
 
-                dragStart = null;
-                element.ReleaseMouseCapture();
+                if (dragStart.HasValue)
+                {
+                    //Was in drag mode
+                    dragStart = null;
+                    element.ReleaseMouseCapture();
+                }
+
             };
 
+            // Mousemove Implementation
             mouseMove = (sender, args) =>
             {
                 if (dragStart.HasValue && args.LeftButton == MouseButtonState.Pressed)
@@ -97,7 +108,7 @@ namespace WpfApplication1.elements
                 element.MouseUp -= mouseUp;
                 element.MouseMove -= mouseMove;
             };
-
+            
         }
 
         private void OnClearNodes()
@@ -109,9 +120,8 @@ namespace WpfApplication1.elements
         {
             foreach (var item in oldItems)
             {
-                var node = item as ViewObject;
+                var node = item as UIElement;
                 Children.Remove(node);
-                disableDrag(node);
             }
         }
 
@@ -119,16 +129,15 @@ namespace WpfApplication1.elements
         {
             foreach (var item in newItems)
             {
-                var node = item as ViewObject;
+                var node = item as UIElement;
                 Children.Add(node);
-                enableDrag(node);
             }
         }
         
         #region Dependency Properties
         static System.Collections.Specialized.NotifyCollectionChangedEventHandler ViewObjectCollectionChangedAction;
         
-        private static void deregisterNodes(ObservableCollection<ViewNode> Nodes)
+        private static void deregisterNodes(ObservableCollection<UIElement> Nodes)
         {
             if (Nodes != null) {
                 Nodes.CollectionChanged -= ViewObjectCollectionChangedAction;
@@ -143,7 +152,7 @@ namespace WpfApplication1.elements
             }
         }
 
-        private static void registerNodes(ObservableCollection<ViewNode> Nodes)
+        private static void registerNodes(ObservableCollection<UIElement> Nodes)
         {
             if (Nodes != null) {
                 Nodes.CollectionChanged += ViewObjectCollectionChangedAction;
@@ -184,9 +193,9 @@ namespace WpfApplication1.elements
 
         public static readonly DependencyProperty NodesProperty =
             DependencyProperty.Register("Nodes", 
-                typeof(ObservableCollection<ViewNode>), 
+                typeof(ObservableCollection<UIElement>), 
                 typeof(ViewGraph), 
-                new FrameworkPropertyMetadata(new ObservableCollection<ViewNode>(),
+                new FrameworkPropertyMetadata(new ObservableCollection<UIElement>(),
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     OnNodesPropertyChangedCallback));
 
@@ -196,18 +205,18 @@ namespace WpfApplication1.elements
             d.SetValue(NodesProperty,baseValue.NewValue);
 
             if (baseValue.OldValue != null) {
-                deregisterNodes(baseValue.OldValue as ObservableCollection<ViewNode>);
+                deregisterNodes(baseValue.OldValue as ObservableCollection<UIElement>);
             }
 
             if (baseValue.NewValue != null) {
-                registerNodes(baseValue.NewValue as ObservableCollection<ViewNode>);
+                registerNodes(baseValue.NewValue as ObservableCollection<UIElement>);
             }
 
         }
 
-        public ObservableCollection<ViewNode> Nodes
+        public ObservableCollection<UIElement> Nodes
         {
-            get { return (ObservableCollection<ViewNode>)GetValue(NodesProperty); }
+            get { return (ObservableCollection<UIElement>)GetValue(NodesProperty); }
             set
             {
                 SetValue(NodesProperty, value);

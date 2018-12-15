@@ -10,9 +10,9 @@ namespace WpfApplication1.elements
 {
     public class ViewEdge : ViewObject
     {
-        public ViewNode StartNode { get; set; }
+        public UIElement StartNode { get; set; }
 
-        public ViewNode EndNode { get; set; }
+        public UIElement EndNode { get; set; }
         
         public ViewEdge(ViewableDataObject UserData,ViewNode StartNode, ViewNode EndNode) {
             if (UserData == null) throw new ArgumentNullException("UserData");
@@ -22,16 +22,6 @@ namespace WpfApplication1.elements
             this.UserData = UserData;
             this.StartNode = StartNode;
             this.EndNode = EndNode;
-
-            Drawable = new shapes.ConnectorDrawingObject(
-                () =>
-                {
-                    return this.StartNode.OutgoingConnectorLocation;
-                },
-                () => {
-                    return this.EndNode.IncomingConnectorLocation;
-                }
-            );
 
         }
 

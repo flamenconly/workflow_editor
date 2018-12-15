@@ -88,6 +88,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="elements\ViewNodeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,13 +100,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="elements\adorner\HighlightAdorner.cs" />
+    <Compile Include="elements\adorner\LinkAdorner.cs" />
     <Compile Include="elements\shapes\ConnectorDrawingObject.cs" />
     <Compile Include="elements\shapes\IDrawable.cs" />
+    <Compile Include="elements\shapes\ISelectable.cs" />
     <Compile Include="elements\shapes\RectangleDrawingObject.cs" />
     <Compile Include="elements\ViewableDataObject.cs" />
     <Compile Include="elements\ViewEdge.cs" />
     <Compile Include="elements\ViewGraphViewModel.cs" />
     <Compile Include="elements\ViewNode.cs" />
+    <Compile Include="elements\ViewNodeControl.xaml.cs">
+      <DependentUpon>ViewNodeControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="elements\ViewObject.cs" />
     <Compile Include="elements\ViewGraph.cs" />
     <Compile Include="MainWindow.xaml.cs">

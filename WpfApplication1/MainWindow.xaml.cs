@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApplication1.elements;
+using WpfApplication1.elements.adorner;
 
 namespace WpfApplication1
 {
@@ -34,15 +36,17 @@ namespace WpfApplication1
         
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var viewNode = new elements.ViewNode(new NodeViewDataObject() {Title="First1",Tooltip="First"});
-            ViewGraphViewModel.NodesList = new System.Collections.ObjectModel.ObservableCollection<elements.ViewNode>();
+            var viewNode = new ViewNodeControl()
+            { Width = 100, Height = 100, Title = "First"};
+            viewNode.HighlightAdorner = new HighlightAdorner(viewNode);
+            viewNode.LinkAdorner = new LinkAdorner(viewNode);
+            ViewGraphViewModel.NodesList = new System.Collections.ObjectModel.ObservableCollection<UIElement>();
             ViewGraphViewModel.NodesList.Add(viewNode);
 
-            viewNode = new elements.ViewNode(new NodeViewDataObject() { Title = "Second1", Tooltip = "Second" });
+            viewNode = new ViewNodeControl() { Width = 100, Height = 100, Title = "Second"};
+            viewNode.HighlightAdorner = new HighlightAdorner(viewNode);
+            viewNode.LinkAdorner = new LinkAdorner(viewNode);
             ViewGraphViewModel.NodesList.Add(viewNode);
-
-            var viewEdge = new elements.ViewEdge(new NodeViewDataObject() { Title = "First1", Tooltip = "Second" },viewNode,viewNode);
-            ViewGraphViewModel.EdgesList.Add(viewEdge);
         }
 
         private class NodeViewDataObject : elements.ViewableDataObject

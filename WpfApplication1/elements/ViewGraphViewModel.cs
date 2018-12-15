@@ -5,15 +5,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfApplication1.elements
 {
     public class ViewGraphViewModel : BindableBase
     {
-        private ObservableCollection<ViewNode> _nodes = new ObservableCollection<ViewNode>();
+        private ObservableCollection<UIElement> _nodes = new ObservableCollection<UIElement>();
         private ObservableCollection<ViewEdge> _edges = new ObservableCollection<ViewEdge>();
 
-        public ObservableCollection<ViewNode> NodesList {
+        public ObservableCollection<UIElement> NodesList {
             get { return _nodes; }
             set { SetProperty(ref _nodes, value); }
         }

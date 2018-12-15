@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using WpfApplication1.elements.adorner;
 
 namespace WpfApplication1.elements
 {
@@ -24,22 +25,13 @@ namespace WpfApplication1.elements
 
         public Point OutgoingConnectorLocation { get; set; } = new Point(100, 100);
 
-        public shapes.IDrawable DrawingShape { get; set; } = new shapes.RectangleDrawingObject();
-
         public ViewNode(ViewableDataObject UserData) {
             if (UserData == null) throw new ArgumentNullException("UserData");
             this.UserData = UserData;
+            SelectionAdorner = new HighlightAdorner(this);
+
         }
 
-        #region Overrides
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-            DrawingShape?.OnRender(drawingContext);
-        }
-
-        #endregion
 
         #region Drawing Purposes
 

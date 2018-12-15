@@ -13,8 +13,8 @@ namespace WpfApplication1.elements.shapes
         public Func<Point> GetStartPoint { get; private set; }
         public Func<Point> GetEndPoint { get; private set; }
 
-        private Brush brush { get; set; }
-        private Pen pen { get; set; }
+        private Brush Brush { get; set; }
+        private Pen Pen { get; set; }
 
         public ConnectorDrawingObject(Func<Point> GetStartPoint, Func<Point> GetEndPoint) {
 
@@ -24,8 +24,8 @@ namespace WpfApplication1.elements.shapes
             this.GetEndPoint = GetEndPoint;
             this.GetStartPoint = GetStartPoint;
 
-            brush = new SolidColorBrush(Colors.DarkGray);
-            pen = new Pen(brush, 0.5);
+            Brush = new SolidColorBrush(Colors.DarkGray);
+            Pen = new Pen(Brush, 0.5);
         }
 
         public void OnRender(DrawingContext drawingContext)
@@ -33,7 +33,7 @@ namespace WpfApplication1.elements.shapes
             var startPoint = GetStartPoint();
             var endPoint = GetEndPoint();
 
-            drawingContext.DrawLine(pen, startPoint, endPoint);
+            drawingContext.DrawLine(Pen, startPoint, endPoint);
 
         }
     }
