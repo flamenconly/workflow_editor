@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApplication1.elements;
 using WpfApplication1.elements.adorner;
+using WpfApplication1.elements.shapes;
 
 namespace WpfApplication1
 {
@@ -36,17 +37,7 @@ namespace WpfApplication1
         
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var viewNode = new ViewNodeControl()
-            { Width = 100, Height = 100, Title = "First"};
-            viewNode.HighlightAdorner = new HighlightAdorner(viewNode);
-            viewNode.LinkAdorner = new LinkAdorner(viewNode);
-            ViewGraphViewModel.NodesList = new System.Collections.ObjectModel.ObservableCollection<UIElement>();
-            ViewGraphViewModel.NodesList.Add(viewNode);
-
-            viewNode = new ViewNodeControl() { Width = 100, Height = 100, Title = "Second"};
-            viewNode.HighlightAdorner = new HighlightAdorner(viewNode);
-            viewNode.LinkAdorner = new LinkAdorner(viewNode);
-            ViewGraphViewModel.NodesList.Add(viewNode);
+            ViewGraphViewModel.InitMockup();
         }
 
         private class NodeViewDataObject : elements.ViewableDataObject

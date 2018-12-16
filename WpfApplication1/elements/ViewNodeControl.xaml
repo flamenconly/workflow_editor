@@ -5,14 +5,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfApplication1.elements"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="100" Background="Aqua">
+             d:DesignHeight="100" d:DesignWidth="100" Background="CadetBlue">
+    <UserControl.BorderBrush>
+        <SolidColorBrush Color="AntiqueWhite" />
+    </UserControl.BorderBrush>
+    <UserControl.BorderThickness>
+        <Thickness Top="1" Left="1" Right="1" Bottom="1" />
+    </UserControl.BorderThickness>
+    <UserControl.Effect>
+        <DropShadowEffect Opacity="0.5"/>
+    </UserControl.Effect>
+    
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Label Content="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+        
+        
+        <Label Content="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+               HorizontalAlignment="Center" Foreground="AntiqueWhite" />
 
     </Grid>
 </UserControl>

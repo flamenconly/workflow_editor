@@ -108,6 +108,7 @@
     <Compile Include="elements\shapes\RectangleDrawingObject.cs" />
     <Compile Include="elements\ViewableDataObject.cs" />
     <Compile Include="elements\ViewEdge.cs" />
+    <Compile Include="elements\ViewEdgePreview.cs" />
     <Compile Include="elements\ViewGraphViewModel.cs" />
     <Compile Include="elements\ViewNode.cs" />
     <Compile Include="elements\ViewNodeControl.xaml.cs">

@@ -5,24 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using WpfApplication1.elements.shapes;
 
 namespace WpfApplication1.elements
 {
     public class ViewEdge : ViewObject
     {
-        public UIElement StartNode { get; set; }
+        public ViewNodeControl StartNode { get; private set; }
 
-        public UIElement EndNode { get; set; }
-        
-        public ViewEdge(ViewableDataObject UserData,ViewNode StartNode, ViewNode EndNode) {
-            if (UserData == null) throw new ArgumentNullException("UserData");
-            if (StartNode == null) throw new ArgumentNullException("StartNode");
-            if (EndNode == null) throw new ArgumentNullException("EndNode");
+        public ViewNodeControl EndNode { get; private set; }
 
-            this.UserData = UserData;
-            this.StartNode = StartNode;
-            this.EndNode = EndNode;
+        public Point? DropPosition { get; set; }
 
+        public void Connect(ViewNodeControl startNode, ViewNodeControl endNode) {
+            if (startNode == null) throw new ArgumentNullException("StartNode");
+            if (endNode == null) throw new ArgumentException("EndNode");
+            StartNode = startNode;
+            EndNode = endNode;
+            Drawable = new ConnectorDrawingObject(StartNode.GetOutgoingEdgePosition, EndNode.GetIncomingEdgePosition);
         }
 
         public shapes.IDrawable Drawable { get; set; }
@@ -32,7 +32,7 @@ namespace WpfApplication1.elements
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-            Drawable.OnRender(drawingContext);
+            Drawable?.OnRender(drawingContext);
         }
 
 

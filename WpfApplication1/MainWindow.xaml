@@ -6,17 +6,25 @@
         xmlns:local="clr-namespace:WpfApplication1.elements"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded" x:Name="mainWindow">
-    <Grid>
+        Title="MainWindow" Height="600" Width="800" Loaded="Window_Loaded" x:Name="mainWindow">
+    <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <local:ViewGraph x:Name="viewer" 
+        <ScrollViewer Grid.Row="0" Grid.Column="0">
+            <local:ViewGraph x:Name="viewer" 
                          Nodes="{Binding NodesList}"
-                         Edges="{Binding EdgesList}"/>
+                         Edges="{Binding EdgesList}"
+                             ScrollViewer.PanningMode="Both" 
+                             ScrollViewer.CanContentScroll="True" 
+                             ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+                             ScrollViewer.VerticalScrollBarVisibility="Visible"                             
+                             />
+        </ScrollViewer>
+        
 
 
     </Grid>

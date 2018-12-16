@@ -97,6 +97,8 @@ namespace WpfApplication1.elements
                 }
             };
 
+
+
             enableDrag = (element) => {
                 element.MouseDown += mouseDown;
                 element.MouseUp += mouseUp;
@@ -109,6 +111,26 @@ namespace WpfApplication1.elements
                 element.MouseMove -= mouseMove;
             };
             
+        }
+
+        protected override Size MeasureOverride(Size constraint)
+        {
+            base.MeasureOverride(constraint);
+            var desiredSize = new Size(100d,100d);
+
+            foreach (UIElement child in Children)
+            {
+                var left = GetLeft(child);
+                var top = GetTop(child);
+
+                if (double.IsNaN(left)) left = 1;
+                if (double.IsNaN(top)) top = 1;
+
+                desiredSize = new Size(
+                    Math.Max(desiredSize.Width, left + child.DesiredSize.Width),
+                    Math.Max(desiredSize.Height, top + child.DesiredSize.Height));
+            }
+            return desiredSize;
         }
 
         private void OnClearNodes()

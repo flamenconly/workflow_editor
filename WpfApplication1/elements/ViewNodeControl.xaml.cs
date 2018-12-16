@@ -14,26 +14,44 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApplication1.elements.adorner;
+using WpfApplication1.elements.shapes;
 
 namespace WpfApplication1.elements
 {
     /// <summary>
     /// Interaction logic for ViewNodeControl.xaml
     /// </summary>
-    public partial class ViewNodeControl : UserControl
+    public partial class ViewNodeControl : UserControl,ISelectable
     {
         public ViewNodeControl()
         {
             InitializeComponent();
         }
 
+        #region Properties
+
         public delegate void OnIsSelectedChanged(ViewNodeControl sender, bool IsSelected);
-        public static event OnIsSelectedChanged IsSelectedChanged;
+        public event OnIsSelectedChanged IsSelectedChanged;
 
         public string Title
         {
             get { return (string)GetValue(TitleProperty); }
             set { SetValue(TitleProperty, value); }
+        }
+
+        public System.Windows.Point GetOutgoingEdgePosition() {
+
+            var y = Canvas.GetTop(this)+DesiredSize.Height;
+            var x = (Canvas.GetLeft(this)) + DesiredSize.Width / 2;
+            return new System.Windows.Point(x, y);
+        }
+
+        public System.Windows.Point GetIncomingEdgePosition() {
+
+            var y = Canvas.GetTop(this);
+            var x = (Canvas.GetLeft(this)) + DesiredSize.Width / 2;
+            return new System.Windows.Point(x, y);
+
         }
 
         // Using a DependencyProperty as the backing store for Title.  This enables animation, styling, binding, etc...
@@ -93,19 +111,20 @@ namespace WpfApplication1.elements
                     dp.SetValue(LinkAdornerProperty, args.NewValue);
                 }));
 
+        #endregion
+
         #region Overrides
+
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
 
-            var adornerLayer = AdornerLayer.GetAdornerLayer(this);
-
-            if (HighlightAdorner != null ) {
-                adornerLayer.Add(HighlightAdorner);
+            if (HighlightAdorner != null) {
+                AddAdornerSafely(HighlightAdorner);               
             }
 
         }
-
+        
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
@@ -142,14 +161,62 @@ namespace WpfApplication1.elements
             if (e.Timestamp - clickStart < 200)
             {
                 IsSelected = !IsSelected;
-                SetSelected();
             }
         }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (dragStart.HasValue && e.LeftButton == MouseButtonState.Pressed && e.Handled == false)
+            {
+                var canvasPosition = e.GetPosition((Parent as Canvas));
+                Canvas.SetLeft(this, canvasPosition.X - dragStart.Value.X);
+                Canvas.SetTop(this, canvasPosition.Y - dragStart.Value.Y);
+
+                (Parent as Canvas).InvalidateMeasure(); // Inform a possible ScrollViewer
+            }
+        }
+
+        protected override void OnDragEnter(DragEventArgs e)
+        {
+            base.OnDragEnter(e);
+
+            var adornerLayer = AdornerLayer.GetAdornerLayer(this);
+
+            if (HighlightAdorner != null)
+            {
+                AddAdornerSafely(HighlightAdorner);
+            }
+
+            // If we are trying to link Nodes
+            if (e.Data.GetDataPresent(typeof(ViewEdgePreview)))
+            {
+                var dataObject = e.Data.GetData(typeof(ViewEdgePreview)) as ViewEdgePreview;
+                dataObject.DropPosition = e.GetPosition(Parent as FrameworkElement);
+            }
+        }
+
+        protected override void OnDragLeave(DragEventArgs e)
+        {
+            base.OnDragLeave(e);
+            var adornerLayer = AdornerLayer.GetAdornerLayer(this);
+            if (HighlightAdorner != null)
+            {
+
+                adornerLayer.Remove(HighlightAdorner);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
 
         private void SetSelected() {
             var adornerLayer = AdornerLayer.GetAdornerLayer(this);
 
-            if (this.IsSelected)
+            if (IsSelected)
             {
                 if (LinkAdorner != null)
                 {
@@ -163,19 +230,18 @@ namespace WpfApplication1.elements
                 }
             }
 
-            IsSelectedChanged?.Invoke(this, this.IsSelected);
+            IsSelectedChanged?.Invoke(this, IsSelected);
         }
 
-        protected override void OnMouseMove(MouseEventArgs e)
+        private void AddAdornerSafely(Adorner adorner)
         {
-            base.OnMouseMove(e);
 
-            if (dragStart.HasValue && e.LeftButton == MouseButtonState.Pressed && e.Handled == false)
-            {
-                var canvasPosition = e.GetPosition((Parent as Canvas));
-                Canvas.SetLeft(this, canvasPosition.X - dragStart.Value.X);
-                Canvas.SetTop(this, canvasPosition.Y - dragStart.Value.Y);
-            }
+            var adornerLayer = AdornerLayer.GetAdornerLayer(this);
+            var alreadyExistingAdorner = adornerLayer.GetAdorners(this);
+
+            if (alreadyExistingAdorner == null ||
+                alreadyExistingAdorner.Count(c => c.Equals(HighlightAdorner)) == 0)
+                adornerLayer.Add(HighlightAdorner);
         }
 
         #endregion

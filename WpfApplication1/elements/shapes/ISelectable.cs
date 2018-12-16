@@ -9,13 +9,7 @@ namespace WpfApplication1.elements.shapes
 {
     interface ISelectable
     {
-        bool IsSelectable { get; set; }
         bool IsSelected { get; set; }
 
-        Adorner SelectionAdorner { get; set; }
-
-        bool EnableSelectionAdorner();
-
-        bool DisableSelectionAdorner();
     }
 }
