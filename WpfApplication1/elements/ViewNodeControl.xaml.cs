@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WpfApplication1.elements.adorner;
-using WpfApplication1.elements.shapes;
 
 namespace WpfApplication1.elements
 {
     /// <summary>
     /// Interaction logic for ViewNodeControl.xaml
     /// </summary>
-    public partial class ViewNodeControl : UserControl,ISelectable
+    public partial class ViewNodeControl : ContentControl
     {
         public ViewNodeControl()
         {
@@ -59,20 +49,6 @@ namespace WpfApplication1.elements
             DependencyProperty.Register("Title", typeof(string), typeof(ViewNodeControl), new FrameworkPropertyMetadata("no title",
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,(dependencyObject,args) => {
                     dependencyObject.SetValue(TitleProperty, args.NewValue);
-                }));
-
-        public Icon Icon
-        {
-            get { return (Icon)GetValue(IconProperty); }
-            set { SetValue(IconProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Icon.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IconProperty =
-            DependencyProperty.Register("Icon", typeof(Icon), typeof(ViewNodeControl), new FrameworkPropertyMetadata(null,
-                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                (dp,args) => {
-                    dp.SetValue(IconProperty, args.NewValue);
                 }));
 
         public Adorner HighlightAdorner
@@ -208,28 +184,21 @@ namespace WpfApplication1.elements
             }
         }
 
+        protected override void OnVisualParentChanged(DependencyObject oldParent)
+        {
+            base.OnVisualParentChanged(oldParent);
+            if (Parent != null) {
+                LinkAdorner = new LinkAdorner(this);
+                AddAdornerSafely(LinkAdorner);
+            }
+        }
+
         #endregion
 
         #region Private Methods
 
 
         private void SetSelected() {
-            var adornerLayer = AdornerLayer.GetAdornerLayer(this);
-
-            if (IsSelected)
-            {
-                if (LinkAdorner != null)
-                {
-                    adornerLayer.Add(LinkAdorner);
-                }
-            }
-            else {
-                if (LinkAdorner != null)
-                {
-                    adornerLayer.Remove(LinkAdorner);
-                }
-            }
-
             IsSelectedChanged?.Invoke(this, IsSelected);
         }
 
@@ -240,8 +209,8 @@ namespace WpfApplication1.elements
             var alreadyExistingAdorner = adornerLayer.GetAdorners(this);
 
             if (alreadyExistingAdorner == null ||
-                alreadyExistingAdorner.Count(c => c.Equals(HighlightAdorner)) == 0)
-                adornerLayer.Add(HighlightAdorner);
+                alreadyExistingAdorner.Count(c => c.Equals(adorner)) == 0)
+                adornerLayer.Add(adorner);
         }
 
         #endregion

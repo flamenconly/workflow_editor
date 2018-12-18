@@ -39,18 +39,6 @@
       <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Msagl, Version=3.0.0.0, Culture=neutral, PublicKeyToken=640c57aa40e7ae7d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Msagl.1.1.3\lib\net40\Microsoft.Msagl.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Msagl.Drawing, Version=3.0.0.0, Culture=neutral, PublicKeyToken=8a3d7c21d5fa1306, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Msagl.Drawing.1.1.3\lib\net40\Microsoft.Msagl.Drawing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Msagl.GraphViewerGdi, Version=3.0.0.0, Culture=neutral, PublicKeyToken=fffc27ea4058b3a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Msagl.GraphViewerGDI.1.1.3\lib\net40\Microsoft.Msagl.GraphViewerGdi.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Prism, Version=7.1.0.431, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.1.0.431\lib\net45\Prism.dll</HintPath>
       <Private>True</Private>
@@ -88,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Resources\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="elements\ViewNodeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -102,19 +94,16 @@
     </Compile>
     <Compile Include="elements\adorner\HighlightAdorner.cs" />
     <Compile Include="elements\adorner\LinkAdorner.cs" />
-    <Compile Include="elements\shapes\ConnectorDrawingObject.cs" />
-    <Compile Include="elements\shapes\IDrawable.cs" />
-    <Compile Include="elements\shapes\ISelectable.cs" />
-    <Compile Include="elements\shapes\RectangleDrawingObject.cs" />
-    <Compile Include="elements\ViewableDataObject.cs" />
-    <Compile Include="elements\ViewEdge.cs" />
+    <Compile Include="elements\adorner\OutgoingLinkDecorator.cs" />
+    <Compile Include="elements\converter\MinusAbsolutValueConverter.cs" />
+    <Compile Include="elements\FrameworkHelper.cs" />
+    <Compile Include="elements\IFrameworkHelper.cs" />
     <Compile Include="elements\ViewEdgePreview.cs" />
     <Compile Include="elements\ViewGraphViewModel.cs" />
     <Compile Include="elements\ViewNode.cs" />
     <Compile Include="elements\ViewNodeControl.xaml.cs">
       <DependentUpon>ViewNodeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="elements\ViewObject.cs" />
     <Compile Include="elements\ViewGraph.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -151,6 +140,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Themes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\outline_input_black_18dp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,17 +1,10 @@
-﻿using Microsoft.Msagl.Drawing;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections;
-using WpfApplication1.elements.shapes;
-using WpfApplication1.elements.adorner;
-using System.Windows.Documents;
 
 namespace WpfApplication1.elements
 {
@@ -26,6 +19,32 @@ namespace WpfApplication1.elements
         private Action<UIElement> disableDrag;
 
         private Point? dragStart;
+
+        public DragEventHandler DropAction { get; set; } = (object sender, DragEventArgs args) =>
+        {
+            if (args.Data.GetDataPresent(typeof(ViewEdgePreview)))
+            {
+                var viewEdgePreview = args.Data.GetData(typeof(ViewEdgePreview)) as ViewEdgePreview;
+
+                if (viewEdgePreview.StartNode == null) return;
+                if (viewEdgePreview.DropPosition.HasValue == false) return;
+
+                var canvas = (viewEdgePreview.StartNode.Parent as Canvas);
+
+                var frameworkHelper = FrameworkHelper.GetInstance();
+
+                foreach (FrameworkElement child in canvas.Children)
+                {
+                    var boundingBox = frameworkHelper.DetermineBoundingBoxOfUIItemWithinCanvas(child);
+
+                    if (frameworkHelper.IsPositionWithinBoundingBox(viewEdgePreview.DropPosition.Value, boundingBox)) {
+                        // Found our child
+                        break;
+                    }
+
+                }
+            }
+        };
 
         static ViewGraph()
         {
@@ -96,9 +115,7 @@ namespace WpfApplication1.elements
 
                 }
             };
-
-
-
+            
             enableDrag = (element) => {
                 element.MouseDown += mouseDown;
                 element.MouseUp += mouseUp;
@@ -142,8 +159,8 @@ namespace WpfApplication1.elements
         {
             foreach (var item in oldItems)
             {
-                var node = item as UIElement;
-                Children.Remove(node);
+                var node = item as ViewNode;
+                Children.Remove(node.UIElement);
             }
         }
 
@@ -151,73 +168,36 @@ namespace WpfApplication1.elements
         {
             foreach (var item in newItems)
             {
-                var node = item as UIElement;
-                Children.Add(node);
+                var node = item as ViewNode;
+                Children.Add(node.UIElement);
             }
         }
         
         #region Dependency Properties
         static System.Collections.Specialized.NotifyCollectionChangedEventHandler ViewObjectCollectionChangedAction;
         
-        private static void deregisterNodes(ObservableCollection<UIElement> Nodes)
+        private static void DeregisterNodes(ObservableCollection<ViewNode> Nodes)
         {
             if (Nodes != null) {
                 Nodes.CollectionChanged -= ViewObjectCollectionChangedAction;
             }
         }
 
-        private static void deregisterEdges(ObservableCollection<ViewEdge> Edges)
-        {
-            if (Edges != null)
-            {
-                Edges.CollectionChanged -= ViewObjectCollectionChangedAction;
-            }
-        }
-
-        private static void registerNodes(ObservableCollection<UIElement> Nodes)
+        private static void RegisterNodes(ObservableCollection<ViewNode> Nodes)
         {
             if (Nodes != null) {
                 Nodes.CollectionChanged += ViewObjectCollectionChangedAction;
             }
         }
 
-        private static void registerEdges(ObservableCollection<ViewEdge> Edges)
-        {
-            if (Edges != null)
-            {
-                Edges.CollectionChanged += ViewObjectCollectionChangedAction;
-            }
-        }
-
-        // Using a DependencyProperty as the backing store for Edge.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty EdgesProperty =
-            DependencyProperty.Register("Edges", typeof(ObservableCollection<ViewEdge>), typeof(ViewGraph),
-                new FrameworkPropertyMetadata(new ObservableCollection<ViewEdge>(),
-                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                    OnEdgesPropertyChangedCallback));
-
-        private static void OnEdgesPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs baseValue)
-        {
-            d.SetValue(EdgesProperty, baseValue.NewValue);
-            if (baseValue.OldValue != null)
-            {
-                deregisterEdges(baseValue.OldValue as ObservableCollection<ViewEdge>);
-            }
-
-            if (baseValue.NewValue != null)
-            {
-                registerEdges(baseValue.NewValue as ObservableCollection<ViewEdge>);
-            }
-
-        }
 
         // Using a DependencyProperty as the backing store for Nodes.  This enables animation, styling, binding, etc...
 
         public static readonly DependencyProperty NodesProperty =
             DependencyProperty.Register("Nodes", 
-                typeof(ObservableCollection<UIElement>), 
+                typeof(ObservableCollection<ViewNode>), 
                 typeof(ViewGraph), 
-                new FrameworkPropertyMetadata(new ObservableCollection<UIElement>(),
+                new FrameworkPropertyMetadata(new ObservableCollection<ViewNode>(),
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     OnNodesPropertyChangedCallback));
 
@@ -227,33 +207,23 @@ namespace WpfApplication1.elements
             d.SetValue(NodesProperty,baseValue.NewValue);
 
             if (baseValue.OldValue != null) {
-                deregisterNodes(baseValue.OldValue as ObservableCollection<UIElement>);
+                DeregisterNodes(baseValue.OldValue as ObservableCollection<ViewNode>);
             }
 
             if (baseValue.NewValue != null) {
-                registerNodes(baseValue.NewValue as ObservableCollection<UIElement>);
+                RegisterNodes(baseValue.NewValue as ObservableCollection<ViewNode>);
             }
 
         }
 
-        public ObservableCollection<UIElement> Nodes
+        public ObservableCollection<ViewNode> Nodes
         {
-            get { return (ObservableCollection<UIElement>)GetValue(NodesProperty); }
+            get { return (ObservableCollection<ViewNode>)GetValue(NodesProperty); }
             set
             {
                 SetValue(NodesProperty, value);
             }
         }
-
-        public ObservableCollection<ViewEdge> Edges
-        {
-            get { return (ObservableCollection<ViewEdge>)GetValue(EdgesProperty); }
-            set {
-                SetValue(EdgesProperty, value);
-            }
-        }
-
-        
 
         #endregion
     }

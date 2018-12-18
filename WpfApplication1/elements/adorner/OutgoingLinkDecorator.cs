@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
-namespace WpfApplication1.elements.shapes
+namespace WpfApplication1.elements.adorner
 {
-    interface ISelectable
+    internal class OutgoingLinkDecorator : AdornerDecorator
     {
-        bool IsSelected { get; set; }
 
     }
 }
