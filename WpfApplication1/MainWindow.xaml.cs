@@ -1,20 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using WpfApplication1.elements;
-using WpfApplication1.elements.adorner;
-using WpfApplication1.elements.shapes;
 
 namespace WpfApplication1
 {
@@ -26,7 +11,7 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = ViewGraphViewModel= new elements.ViewGraphViewModel();
+            DataContext = ViewGraphViewModel= new ViewGraphViewModel(viewer);
         }
 
         public elements.ViewGraphViewModel ViewGraphViewModel
@@ -40,21 +25,6 @@ namespace WpfApplication1
             ViewGraphViewModel.InitMockup();
         }
 
-        private class NodeViewDataObject : elements.ViewableDataObject
-        {
-            public string Title
-            {
-                get;
-
-                set;
-            }
-
-            public string Tooltip
-            {
-                get;
-
-                set;
-            }
-        }
+        
     }
 }

@@ -59,7 +59,7 @@ namespace WpfApplication1.elements
             };
 
             UIElement.HighlightAdorner = new HighlightAdorner(UIElement);
-            UIElement.LinkAdorner = new LinkAdorner(UIElement);
+            UIElement.LinkAdorner = new OutgoingLinkAdorner(UIElement) { };
             UIElement.Drop += parent.DropAction;
 
             ImageSource = "pack://application:,,,/WpfApplication1;component/Resources/outline_input_black_18dp.png";

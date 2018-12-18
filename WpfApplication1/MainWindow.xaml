@@ -17,7 +17,6 @@
         <ScrollViewer Grid.Row="0" Grid.Column="0">
             <local:ViewGraph x:Name="viewer" 
                          Nodes="{Binding NodesList}"
-                         Edges="{Binding EdgesList}"
                              ScrollViewer.PanningMode="Both" 
                              ScrollViewer.CanContentScroll="True" 
                              ScrollViewer.HorizontalScrollBarVisibility="Visible" 

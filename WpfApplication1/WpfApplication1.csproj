@@ -93,8 +93,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="elements\adorner\HighlightAdorner.cs" />
+    <Compile Include="elements\adorner\IncomingLinkAdorner.cs" />
     <Compile Include="elements\adorner\LinkAdorner.cs" />
-    <Compile Include="elements\adorner\OutgoingLinkDecorator.cs" />
+    <Compile Include="elements\adorner\OutgoingLinkAdorner.cs" />
     <Compile Include="elements\converter\MinusAbsolutValueConverter.cs" />
     <Compile Include="elements\FrameworkHelper.cs" />
     <Compile Include="elements\IFrameworkHelper.cs" />

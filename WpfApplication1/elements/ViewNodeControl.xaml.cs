@@ -188,7 +188,7 @@ namespace WpfApplication1.elements
         {
             base.OnVisualParentChanged(oldParent);
             if (Parent != null) {
-                LinkAdorner = new LinkAdorner(this);
+                LinkAdorner = new OutgoingLinkAdorner(this);
                 AddAdornerSafely(LinkAdorner);
             }
         }
