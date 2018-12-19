@@ -20,8 +20,6 @@ namespace WpfApplication1.elements.adorner
             protected Brush AdornerHoverBrush { get; set; } = Brushes.LightBlue;
             protected Pen AdornerHoverPen { get; set; }
 
-            protected bool IsHovered { get; set; }
-
             public LinkAdorner(UIElement adornedElement) : base(adornedElement)
             {
 
@@ -29,21 +27,6 @@ namespace WpfApplication1.elements.adorner
 
                 AdornerPen = new Pen(AdornerBrush, 1);
                 AdornerHoverPen = new Pen(AdornerHoverBrush, 1);
-            }
-
-            protected override void OnRender(DrawingContext drawingContext)
-            {
-                base.OnRender(drawingContext);
-
-                var adornedRect = new Rect(AdornedElement.RenderSize);
-                Width = adornedRect.Width / 2;
-
-                drawingContext.DrawRectangle(
-                    IsHovered ? AdornerHoverBrush : AdornerBrush,
-                    IsHovered ? AdornerHoverPen : AdornerPen,
-                    new Rect(
-                    new Point(((adornedRect.TopRight.X - adornedRect.TopLeft.X) / 2 - (Width / 2)), adornedRect.Bottom - Height + 5)
-                    , new Size(Width, Height)));
             }
 
             protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -64,20 +47,6 @@ namespace WpfApplication1.elements.adorner
             {
                 base.OnMouseUp(e);
                 ReleaseMouseCapture();
-                InvalidateVisual();
-            }
-
-            protected override void OnMouseEnter(MouseEventArgs e)
-            {
-                base.OnMouseEnter(e);
-                IsHovered = true;
-                InvalidateVisual();
-            }
-
-            protected override void OnMouseLeave(MouseEventArgs e)
-            {
-                base.OnMouseLeave(e);
-                IsHovered = false;
                 InvalidateVisual();
             }
 

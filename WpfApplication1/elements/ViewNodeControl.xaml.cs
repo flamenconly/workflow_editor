@@ -73,20 +73,35 @@ namespace WpfApplication1.elements
             set { _isSelected = value; SetSelected(); }
         }
 
-        public Adorner LinkAdorner
+        public Adorner OutgoingLinkAdorner
         {
-            get { return (Adorner)GetValue(LinkAdornerProperty); }
-            set { SetValue(LinkAdornerProperty, value); }
+            get { return (Adorner)GetValue(OutgoingLinkAdornerProperty); }
+            set { SetValue(OutgoingLinkAdornerProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for LinkAdorner.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty LinkAdornerProperty =
-            DependencyProperty.Register("LinkAdorner", typeof(Adorner), typeof(ViewNodeControl), new FrameworkPropertyMetadata(null,
+        public static readonly DependencyProperty OutgoingLinkAdornerProperty =
+            DependencyProperty.Register("OutgoingLinkAdorner", typeof(Adorner), typeof(ViewNodeControl), new FrameworkPropertyMetadata(null,
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                 (dp,args)=> {
-                    dp.SetValue(LinkAdornerProperty, args.NewValue);
+                    dp.SetValue(OutgoingLinkAdornerProperty, args.NewValue);
                 }));
 
+
+        public Adorner IncomingLinkAdorner
+        {
+            get { return (Adorner)GetValue(IncomingLinkAdornerProperty); }
+            set { SetValue(IncomingLinkAdornerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IncomingLinkAdorner.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IncomingLinkAdornerProperty =
+            DependencyProperty.Register("IncomingLinkAdorner", typeof(Adorner), typeof(ViewNodeControl), 
+                new FrameworkPropertyMetadata(null,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                (dp, args) => {
+                    dp.SetValue(OutgoingLinkAdornerProperty, args.NewValue);
+                }));
         #endregion
 
         #region Overrides
@@ -188,8 +203,11 @@ namespace WpfApplication1.elements
         {
             base.OnVisualParentChanged(oldParent);
             if (Parent != null) {
-                LinkAdorner = new OutgoingLinkAdorner(this);
-                AddAdornerSafely(LinkAdorner);
+                if(OutgoingLinkAdorner==null) OutgoingLinkAdorner = new OutgoingLinkAdorner(this);
+                AddAdornerSafely(OutgoingLinkAdorner);
+
+                if (IncomingLinkAdorner == null) IncomingLinkAdorner = new IncomingLinkAdorner(this);
+                AddAdornerSafely(IncomingLinkAdorner);
             }
         }
 
