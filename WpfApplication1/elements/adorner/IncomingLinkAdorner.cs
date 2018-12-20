@@ -19,8 +19,8 @@ namespace WpfApplication1.elements.adorner
 
             Height = 3;
 
-            AdornerPen = new Pen(AdornerBrush, 1);
-            AdornerHoverPen = new Pen(AdornerHoverBrush, 1);
+            AdornerPen = new Pen(AdornerBrush, 3);
+            AdornerHoverPen = new Pen(AdornerHoverBrush, 3);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -28,14 +28,30 @@ namespace WpfApplication1.elements.adorner
             base.OnRender(drawingContext);
 
             var adornedRect = new Rect(AdornedElement.RenderSize);
-            Width = adornedRect.Width / 2;
+            Width = adornedRect.Width / 4;
 
-            drawingContext.DrawRectangle(
-                IsHovered ? AdornerHoverBrush : AdornerBrush,
-                IsHovered ? AdornerHoverPen : AdornerPen,
-                new Rect(
-                new Point(((adornedRect.TopRight.X - adornedRect.TopLeft.X) / 2 - (Width / 2)), adornedRect.Top - Height - 5)
-                , new Size(Width, Height)));
+            var startPoint = new Point(adornedRect.TopLeft.X + Width, adornedRect.Top - 5);
+            var endPoint = new Point(adornedRect.TopRight.X - Width, startPoint.Y);
+
+            var ellipse = new ArcSegment()
+            {
+                Point = endPoint,
+                Size = new Size(adornedRect.Width * 0.5, adornedRect.Width * .25),
+                SweepDirection = SweepDirection.Counterclockwise,
+                IsLargeArc = false,
+                IsSmoothJoin = true
+            };
+
+            var pathFigure = new PathFigure(startPoint, new List<PathSegment>() { ellipse }, false) { IsFilled = false };
+
+            var geometry = new PathGeometry(
+                new PathFigureCollection() {
+                    pathFigure
+                }
+            );
+
+            drawingContext.DrawGeometry(IsHovered ? AdornerHoverBrush : AdornerBrush,
+                IsHovered ? AdornerHoverPen : AdornerPen, geometry);
 
         }
 

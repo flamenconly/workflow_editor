@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace WpfApplication1.elements.adorner
 {
@@ -22,8 +23,8 @@ namespace WpfApplication1.elements.adorner
 
             Height = 3;
 
-            AdornerPen = new Pen(AdornerBrush, 1);
-            AdornerHoverPen = new Pen(AdornerHoverBrush, 1);
+            AdornerPen = new Pen(AdornerBrush, 3);
+            AdornerHoverPen = new Pen(AdornerHoverBrush, 3);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -31,28 +32,33 @@ namespace WpfApplication1.elements.adorner
             base.OnRender(drawingContext);
 
             var adornedRect = new Rect(AdornedElement.RenderSize);
-            Width = adornedRect.Width/2;
+            Width = adornedRect.Width/4;
 
-            var startPoint = new Point(adornedRect.TopLeft.X, adornedRect.Bottom - Height + 5);
-            var midPoint = new Point(((adornedRect.TopRight.X - adornedRect.TopLeft.X) / 2 - (Width / 2)), startPoint.Y + 10);
-            var endPoint = new Point(adornedRect.TopRight.X, startPoint.Y);
+            var startPoint = new Point(adornedRect.TopLeft.X+Width, adornedRect.Bottom + 5);
+            var endPoint = new Point(adornedRect.TopRight.X-Width, startPoint.Y);
 
-            var geometry = new PathGeometry(new PathFigureCollection() {
-                new PathFigure(startPoint,
-                new List<PathSegment>(){ new ArcSegment() {
-                    Point = new Point(10,100),
-                    SweepDirection = SweepDirection.Counterclockwise,
-                    Size = new Size(adornedRect.Size.Width,10),
-                    RotationAngle = 45,
-                    IsSmoothJoin =true } }
-                ,false)
-            }
+            var ellipse = new ArcSegment()
+            {
+                Point = endPoint,
+                Size = new Size(adornedRect.Width*0.5, adornedRect.Width*.25),
+                SweepDirection = SweepDirection.Clockwise,
+                IsLargeArc = false,
+                IsSmoothJoin = true
+            };
+
+            var pathFigure = new PathFigure(startPoint,new List<PathSegment>(){ellipse}, false){ IsFilled = false};
+
+            var geometry = new PathGeometry(
+                new PathFigureCollection() {
+                    pathFigure
+                }
             );
-
+            
             drawingContext.DrawGeometry(IsHovered ? AdornerHoverBrush : AdornerBrush,
                 IsHovered ? AdornerHoverPen : AdornerPen, geometry);
 
         }
+
 
         protected override void OnMouseEnter(MouseEventArgs e)
         {
