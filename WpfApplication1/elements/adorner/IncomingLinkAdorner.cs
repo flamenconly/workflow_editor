@@ -10,10 +10,9 @@ using System.Windows.Media;
 namespace WpfApplication1.elements.adorner
 {
     internal class IncomingLinkAdorner : LinkAdorner
-    {
-        private bool _isHovered;
+    { 
 
-        protected bool IsHovered { get { return _isHovered; } set { _isHovered = value; } }
+        protected bool IsHovered { get; set; }
 
         public IncomingLinkAdorner(UIElement adornedElement) : base(adornedElement) {
 
@@ -53,6 +52,14 @@ namespace WpfApplication1.elements.adorner
             drawingContext.DrawGeometry(IsHovered ? AdornerHoverBrush : AdornerBrush,
                 IsHovered ? AdornerHoverPen : AdornerPen, geometry);
 
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            CaptureMouse();
+            DragDrop.DoDragDrop(this, new ViewEdgePreview() { StartNode = (AdornedElement as ViewNodeControl).DataContext }, DragDropEffects.Move);
         }
 
         protected override void OnMouseEnter(MouseEventArgs e)

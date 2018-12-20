@@ -24,6 +24,7 @@ namespace WpfApplication1.elements
         {
             if (args.Data.GetDataPresent(typeof(ViewEdgePreview)))
             {
+
                 var viewEdgePreview = args.Data.GetData(typeof(ViewEdgePreview)) as ViewEdgePreview;
 
                 if (viewEdgePreview.StartNode == null) return;
@@ -38,10 +39,16 @@ namespace WpfApplication1.elements
                     var boundingBox = frameworkHelper.DetermineBoundingBoxOfUIItemWithinCanvas(child);
 
                     if (frameworkHelper.IsPositionWithinBoundingBox(viewEdgePreview.DropPosition.Value, boundingBox)) {
-                        // Found our child
-                        break;
-                    }
 
+                        if (args.Effects == DragDropEffects.Link)
+                        {
+                            // Add an edge
+
+                        }
+                        else {
+                            // Remove the edge
+                        }
+                    }
                 }
             }
         };

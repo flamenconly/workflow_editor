@@ -59,6 +59,13 @@ namespace WpfApplication1.elements.adorner
 
         }
 
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            CaptureMouse();
+            DragDrop.DoDragDrop(this, new ViewEdgePreview() { StartNode = (AdornedElement as ViewNodeControl) }, DragDropEffects.Link);
+        }
 
         protected override void OnMouseEnter(MouseEventArgs e)
         {

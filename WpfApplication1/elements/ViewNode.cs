@@ -16,18 +16,20 @@ namespace WpfApplication1.elements
     {
         private Adorner _incomingLinkConnectorAdorner;
         private Adorner _outgoingLinkConnectorAdorner;
+        private Adorner _edgeAdorner;
+        private string _imageSource;
+
+        private string _title;
+
+        public string Title { get { return _title; } set { SetProperty(ref _title, value); } }
 
         public Adorner IncomingLinkConnectorAdorner { get { return _incomingLinkConnectorAdorner; } set { SetProperty(ref _incomingLinkConnectorAdorner, value); } }
 
         public Adorner OutgoingLinkConnectorAdorner { get { return _outgoingLinkConnectorAdorner; } set { SetProperty(ref _outgoingLinkConnectorAdorner, value); } }
 
-        private string _imageSource;
+        public Adorner EdgeAdorner { get { return _edgeAdorner; } set { SetProperty(ref _edgeAdorner, value); } }
 
-        public string ImageSource
-        {
-            get { return _imageSource; }
-            set { SetProperty(ref _imageSource,value); }
-        }
+        public string ImageSource { get { return _imageSource; }  set { SetProperty(ref _imageSource,value); } }
 
         public ViewNodeControl UIElement { get; protected set; }
 
@@ -42,10 +44,6 @@ namespace WpfApplication1.elements
         /// Edges which are connecting this Nodes with others
         /// </summary>
         public List<ViewNode> OutgoingLinks { get; private set; } = new List<ViewNode>();
-
-        public Point IncomingConnectorLocation { get; set; } = new Point(1,1);
-
-        public Point OutgoingConnectorLocation { get; set; } = new Point(100, 100);
 
         public ViewNode(ViewGraph parent) {
             if (parent == null) throw new ArgumentNullException("parent");
@@ -64,8 +62,6 @@ namespace WpfApplication1.elements
             UIElement.Drop += parent.DropAction;
 
             ImageSource = "pack://application:,,,/WpfApplication1;component/Resources/outline_input_black_18dp.png";
-
-
 
         }
 

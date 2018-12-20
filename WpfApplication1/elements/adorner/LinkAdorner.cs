@@ -14,7 +14,7 @@ namespace WpfApplication1.elements.adorner
             protected Pen LinkDashLinePen { get; set; }
             protected Brush LinkDashLineBrush { get; set; } = Brushes.DarkGray;
 
-            protected Brush AdornerBrush { get; set; } = Brushes.DarkBlue;
+            protected Brush AdornerBrush { get; set; } = Brushes.CornflowerBlue;
             protected Pen AdornerPen { get; set; }
 
             protected Brush AdornerHoverBrush { get; set; } = Brushes.LightBlue;
@@ -29,13 +29,7 @@ namespace WpfApplication1.elements.adorner
                 AdornerHoverPen = new Pen(AdornerHoverBrush, 1);
             }
 
-            protected override void OnMouseDown(MouseButtonEventArgs e)
-            {
-                base.OnMouseDown(e);
-
-                CaptureMouse();
-                DragDrop.DoDragDrop(this, new ViewEdgePreview() { StartNode = (AdornedElement as ViewNodeControl) }, DragDropEffects.Link);
-            }
+           
 
             protected override void OnDragOver(DragEventArgs e)
             {
