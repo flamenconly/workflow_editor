@@ -102,6 +102,21 @@ namespace WpfApplication1.elements
                 (dp, args) => {
                     dp.SetValue(OutgoingLinkAdornerProperty, args.NewValue);
                 }));
+        
+        public Adorner EdgeAdorner
+        {
+            get { return (Adorner)GetValue(EdgeAdornerProperty); }
+            set { SetValue(EdgeAdornerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EdgeAdorner.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EdgeAdornerProperty =
+            DependencyProperty.Register("EdgeAdorner", typeof(Adorner), typeof(ViewNodeControl), new FrameworkPropertyMetadata(null,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                (dp, args) => {
+                    dp.SetValue(EdgeAdornerProperty, args.NewValue);
+                }));
+
         #endregion
 
         #region Overrides
@@ -229,6 +244,11 @@ namespace WpfApplication1.elements
             if (alreadyExistingAdorner == null ||
                 alreadyExistingAdorner.Count(c => c.Equals(adorner)) == 0)
                 adornerLayer.Add(adorner);
+        }
+
+        private void RemoveAdornerSafely(Adorner adorner) {
+            var adornerLayer = AdornerLayer.GetAdornerLayer(this);
+            adornerLayer.Remove(adorner);
         }
 
         #endregion
